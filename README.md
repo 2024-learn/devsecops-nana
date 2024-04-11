@@ -1,0 +1,58 @@
+# DevSecOps Bootcamp
+
+## Security Essentials
+
+- Government regulations:
+  - GDPR: General Data Protection Regulation - EU's data protection law
+- Compliance:
+  - Regulations must be enforced. Audits are done to make sure the regulations are followed
+- __Types of Attacks:__
+  - _Phishing attack/Social Hacking:_
+    - Tricking a human, instead of a system
+    - e.g. Attacker sends a legitimate looking email that executes a harmful script when clicked on by the user
+      - phone call, misrepresenting a person with a fake ID card, thumbdrive from a co-worker or found in the parking lot, getting forwarded to an identical but fake website from the original authentic website, ...etc
+  - _Cross Site Scripting (XSS):_
+    - Takes advantage of application vulnerabilities
+    - Attacker injects the website with malicious script which is then loaded and executed in a user's browser
+    - Common impact: stealing user identity
+  - _Client Side Request Forgery (CSRF):_
+    - <https://owasp.org/www-community/attacks/csrf>
+    - Attacker forges a request by pretending to be another user
+    - "Client-side" indicates that the attack takes place on the user's side, within their browser
+    - CSRF is an attack that tricks the victim into submitting a malicious request. It inherits the identity and privileges of the victim to perform an undesired function on the victim’s behalf.
+    - If the application does not have a proper logic for revoking stolen Session IDs and tokens, an attacker can hold on to those keys and gain access for as long as they like
+    - An attacker can use XSS to inject JS code that steals session onformation and start making those forged requests as the authorized user within that application using that logged in user's session
+    - This can happen if the application has weak authentication checks, does not reject eternal code, e.g. JS code, does not properly validate user on email change
+  - _Server- Side Request Forgery (SSRF):_
+    - Attackers forges the request pretending to be the server
+    - <https://owasp.org/www-community/attacks/Server_Side_Request_Forgery>
+    - In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can supply or modify a URL which the code running on the server will read or submit data to, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like http enabled databases or perform post requests towards internal services which are not intended to be exposed.
+    - Requires more in-depth knowledge of the application's architecture and behavior, but more dangerous because of administrative access and access to all user data
+  - _SQL Injection:_
+    - Attacker manipulates or injects malicious SQL code into a database query
+    - Takes advantage of improper handling of user input in an app that interacts with a DB
+    - Dangerous because the attacker may get access to all the data, delete all the data or manipulate the data
+  - _Third-Party Libraries:_
+    - If a vendor does not have proper security, it also exposes all the companies that are using it to vulnerabilities
+    - This then exposes your company's users to the vulnerability, there by cascading the attack not just to the vendor but to your company and to your users
+    - If a third-party library has a security hole, then that becomes your security deficiency, therefore you need to validate the libraries and vendors used in your applications and resources
+    - Common sources:
+      - Security risks introduced by developers
+      - Small non-offical libraries with intentional malicious code
+    - Keep track of vulnerabilities discovered from the libraries used in your apps and upgrade to the versions with fixed patches
+    - Public databases for known security vulnerabilities:
+      - CVE: Common Vulnerabilities and Exxposures
+        - This is a system that provides a reference for publicly known security vulnerabilities
+    - PII: Personal Identifiable Information: Information that, when used alone or with other relevant data can identify an individual; like: biometric identifiers, name, full face photos, geographical info, phone, acocunt numbers, address, vehical or insurance, birthdate, medical and health plan info, email, SSN etc. This information is unique to a user
+  - _Weak Password:_
+    - Attackers can use brute-force attacks through use of trial and error to try and break into a network or website. They typically use hacking tools to automate these login attempts
+    - Enforce strong password policy: e.g. specific number of characters, special characters, forbid phrase passwords, do not reuse the same password for multiple applications, use password managers like lastPass or 1pass.
+      - Password managers help with managing hundreds of passwords. The only password you need to remember is a strong master password to lastPass
+  - _Denial of Service Attack (DOS):_
+    - Target system is flooded with an overwhelming volume of traffic
+    - Distributed Denial of Service (DDoS): Often multiple compromised systems (botnet) are coordinated to launch the attack simultaneously
+    - Attack consumes all the available bandwidth, consumes too many connections and exhausts the server's resources, such as CPU, memory..., leaving the server unable to handle legitimate requests
+    - How to defend against: Firewalls, Intrusion Detections Systems (IDS), Traffic filtering, etc.
+- __OWASP Top 10 Project__
+  - <https://owasp.org/www-project-top-ten/>
+  
