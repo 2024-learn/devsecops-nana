@@ -161,7 +161,7 @@
     - Configure logging for apps and thrid party components that are security relevant
       - Important auditable events like logins, failed logins, high value transactions
       - Ensure sufficient user context is logged to identify suspicious or malicious accounts
-10. _Server-Side Request Forgery (SSRF)_
+  10. _Server-Side Request Forgery (SSRF)_
   - Occurs when a web app allows an atacker to coerce the app to send a request to a remote source and then web app fetches a remote resource without validating the user-supplied URL
     - Servers have more priviledges than the client.
     - Attackercs can use SSRF to attack systems that are protected behind web application firewalls, VPN or network access control lists
