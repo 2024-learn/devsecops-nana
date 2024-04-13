@@ -176,3 +176,66 @@
       - Users, process and systems are only granted the minimum privileges necessary to perform the tasks. This limits the damage done through permissions
   - DevSecOps works to automate checking (security testing, vulnerability scanning, code analysis, compliance checks ...) and validating that all layers of security are implemented and in place, giving you a visibility of how secure your systems are/what the security posture looks like
 
+## Introduction to DevSecOps
+
+- __Evolution of DevSecOps__
+  - Traditional way: Security as an afterthought.
+    - Security was not considered until after the release of an application where the patching was done afterwards
+    - This is problematic as security fixes get more expensive the later the security issues are discovered
+  - New DevSecOps: "Shifting Security left"
+    - Security is considered all along the way from development, to deploying and after the app has already been released. 
+  - How DevSecOps looks in practice:
+    - Security professionals:
+      - Create security policies
+      - Select automation tools for detecting security issues
+      - Train Developers and Operations teams
+- __Types of Security Tests:__
+  - _Static Application Security Testing (SAST)_
+    - It does static analysis of the code (app is not running)
+    - Identifies Security vulnerabilities in app's source code, configuration files, etc.
+    - Looks for common coding errors, deviations from secure coding practices, etc.
+    - Easiest form of security tests
+  - _Software Composition Analysis (SCA)_
+    - Check third-party and open source libraries and frameworks (dependencies of your application)
+    - SCA tool goes through our dependencies and checks if any known vulnerabilities for that dependency and specific version and lists the vulnerable dependencies
+    - It analyzes and tracks third-party components used in the app
+  - Both SAST and SCA are static analysis because your app does not need to be running before you make these checks
+    - Only requires access to the code and dependencies
+  - Importance of private repo: if an attacker gets access to your code, they can do the static codes check just like you can, and if they discover the issues before you do, they can take advantage of the found vulnerabilities
+  - _Dynamic Application Security Testing (DAST)_
+    - Testing the app's running instance or deployed version
+    - Checks for the application's vulnerability while it is running
+    - Analyzing behavior and responses in real time
+    - DAST tool simulates attacks
+    - Replicating how it would be interacted with by users and potential attackers
+    - Basically, we are trying to emulate the hacker and trying to hack into or own application and systems
+    - It does not require access to the code. Also called _Black Box Security Testing_
+- Scanning code once is not enough; applications are developed continuously and therefore need continuous testing and fixing.
+- Security scans and tests can slow down the CI/CD pipeline
+  - Do only basic needed checks on every commit
+    - Security checks only for affected code parts
+    - Run 3rd-party library checks only when dependencies are changed
+  - Comprehensive, complete security checks can be scheduled once per night as nightly build when no one's work is interrupted
+- Manual functional and security tests
+  - Some functionality and security tests cannot be automated or they are expensive and time consuming
+  - Penetration testing
+    - Often companies hire external experts for that
+    - Important for highly sensitive systems like banking ...
+- Logging and Monitoring
+  - We might still miss something during the automated and manual testing or it might be that the issue appears later after the application was deployed
+  - Logging and monitoring helps to alert the team if a security threat is detected
+- Roles and Responsibilities:
+  - Share responsibilities: 
+    - Distribute responsibility for security across teams
+      - Work with developers:
+      - Makes security posture visible to the teams
+      - Help the teams understand and how to fix the issues
+      - Educate and raise awareness among teams about security best practices
+      - This promotes a security-first mindset within the teams
+    - DevSecOps works closely with security engineers who are more specialized in cybersecurity and are well versed in regulatory requirements and compliance frameworks
+      - DevSecOps engineers can tap into their deep understanding of security principles to implement effective security measures
+      - DevSecOps acts an intermediary between different teams
+  - They architect DevSecops processes
+  - Facilitates the integration of security testing into the development and deployment process
+  - Provide guidance on secure coding standards, perform code reviews, etc
+  - Establish mechanisms for continuous security monitoring, threat detection and vulnerability scanning
