@@ -15,7 +15,7 @@
     - Takes advantage of application vulnerabilities
     - Attacker injects the website with malicious script which is then loaded and executed in a user's browser
     - Common impact: stealing user identity
-  - _Client Side Request Forgery (CSRF):_
+  - _Client Side Request Forgery (CSRF)/Session Hijacking:_
     - <https://owasp.org/www-community/attacks/csrf>
     - Attacker forges a request by pretending to be another user
     - "Client-side" indicates that the attack takes place on the user's side, within their browser
@@ -59,15 +59,16 @@
   - Lists the most critical web application security risks (list of common threats).
   - Regularly updated (every 3-4 yrs) to reflect emerging threats
   - This list contains high level categorization of the threats
-  - lists with more detailed security threats: Common Weakness Enumeration (CWE), OWASP ASVS
+  - Lists with more detailed security threats: Common Weakness Enumeration (CWE), OWASP ASVS
   - The order of the list reflects the combination of several factors, including:
     - Incident Rate (likelihood)
     - Impact
     - Exploitability
     - Detectability
-  - 8 of the categories are from data
+  - The more comprehensive OWASP is: OWASP Application Security Verification Standard(ASVS): <https://owasp.org/www-project-application-security-verification-standard/>
+  - _8 of the categories are from data:_
     - Data factors: CWEs Mapped, Incidence Rate, Weighted Exploit, Weighted Impact, Total Occurrences, ...
-  - 2 categories are from Top 10 community survey
+  - _2 categories are from Top 10 community survey:_
     - There are some security risks and trends that aren't in the data
     - It also takes time to develop new testing methodologies for new vulnerability types, etc.
     - It allows for security practitioners to vote for what they see as the highest risks that might not be in the data (yet)
@@ -79,7 +80,7 @@
     - It also includes when an application accidentally exposes sensitive information to unauthorized users. 
       - e.g. when the requests are based on the URL and the request data is part of the URL itself, hackers can manipulate that URL and execute a request that gives them access to some unauthorized data, like files on the server ...
     - So basically whenever an application fails to detect a request forgery, not detecting that it's returning data that it should not be exposing to an unauthorized user, or allowing a hacker to impersonate a legitimate user or give them unauthorized access to some resources, this allows for broken access control vulnerabilities
-  2. _Cryprographic Failures_
+  2. _Cryptographic Failures (lack or Weak cryptography)_
     - This category is about weak encryption of data.
       - Weak encryption (use of broken or risky/weak crypto algorithm)
       - Hard coded credentials (Passwords, API keys, ...)
@@ -206,8 +207,7 @@
     - Testing the app's running instance or deployed version
     - Checks for the application's vulnerability while it is running
     - Analyzing behavior and responses in real time
-    - DAST tool simulates attacks
-    - Replicating how it would be interacted with by users and potential attackers
+    - DAST tool simulates attacks; replicating how it would be interacted with by users and potential attackers
     - Basically, we are trying to emulate the hacker and trying to hack into or own application and systems
     - It does not require access to the code. Also called _Black Box Security Testing_
 - Scanning code once is not enough; applications are developed continuously and therefore need continuous testing and fixing.
@@ -239,3 +239,53 @@
   - Facilitates the integration of security testing into the development and deployment process
   - Provide guidance on secure coding standards, perform code reviews, etc
   - Establish mechanisms for continuous security monitoring, threat detection and vulnerability scanning
+
+## Application Vulnerability Scanning
+
+  - yarn: alternative for npm
+  - `node_modules`: folder where yarn saves the downloaded modules from the web
+  - `yarn.lock`: auto-generated file by yarn containing information of which versions of each dependencies were installed
+  - Security is not centralized; rather it is an ongoing and integral part of the entire SDLC
+  - __Secret Scanning with GitLeaks- Local Environment__
+    - Prevent secrets in git repositories
+    - Secrets: Anything that can be used to access a valuable asset
+      - e.g. API Keys, passwords, tokens, private keys, authentication files
+    - Secret scanning tool: tools that can scan source code and detect hard-coded secrets
+      - e.g. GitLeaks
+      - Fast light-weight and open-source secret scanner for git repos
+      - Detects over 160 secret types, new types added all the time
+    - Install GitLeaks: <https://akashchandwani.medium.com/what-is-gitleaks-and-how-to-use-it-a05f2fb5b034>
+      - `brew install gitleaks` or 
+      - install it via a docker image: <https://hub.docker.com/r/zricethezav/gitleaks>
+        - `docker pull zricethezav/gitleaks:latest`
+        - `export path_to_host_folder_to_scan=/Users/likimanip/code/devops/devsecops-nana/juice-shop`
+        - `docker run -v ${path_to_host_folder_to_scan}:/path zricethezav/gitleaks:latest detect --source="/path" -v` # or `--verbose`
+        - `gitleaks detect --source="./juice-shop" -v` or `gitleaks detect --verbose --source .`: Will scan repos, directories and files
+      - <https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml>
+      - With gitleaks.toml you can customize rules and write your own secret detection rules.
+    - Gitleaks scans through commits.
+      - Parses the output of a `git log -p` command
+      - Even though the sensitive data has been removed, the history of the repo remain intact
+      - So this can still be a security concern, if unauthorized access or data mining of the repo's history occurs. While gitleaks check the code for leaked secrets, oncea commit is pushed, it's actually too late
+      - We could change the password or revert git history but that is not an ideal situation. We can prevent this by scanning before the dev pushes to the repo.
+      - Since we cannot reply on devs to run the scan, we can create a pre-commit hook
+      - _Git Hooks_:
+        - Git hooks is a Git functionality
+        - It is a way to fire off custom scripts when certain important actions occur
+        - There are different types of hooks:
+          - precommit, pre-push, pre-rebase, ... etc.
+          - "pre-commit" hook is fired when you are about to commit your changes
+        - The hooks are all stored in the hooks subdirectory of the git golder: `.git/hooks`. You can view this by: `ls .git`
+        - `vi .git/hooks/pre-commit`
+
+        ```#!/bin/bash
+        docker pull zricethezav/gitleaks:latest
+        export path_to_host_folder_to_scan=/Users/likimanip/code/devops/devsecops-juice-shop
+        docker run -v ${path_to_host_folder_to_scan}:/path zricethezav/gitleaks:latest detect --source="/path" --verbose
+        ```
+        - Make the file executable: `chmod +x .git/hooks/pre-commit` (The pre-commit will be ignored if the file doesn't have executable permissions)
+        - The code will also not commit to the repo as long as the exposed secrets persist. This issue has to be fixed first, hence already boosting the security.
+    - Client-side vs. Server-side hooks:
+      - Server-side hooks: These scripts run before and after pushes to the server, so you can enforce this on the server-side
+        - Different server-side hooks: pre-receive, upate, post-receive
+      - 
