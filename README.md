@@ -263,6 +263,7 @@
         - `gitleaks detect --source="./juice-shop" -v` or `gitleaks detect --verbose --source .`: Will scan repos, directories and files
       - <https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml>
       - With gitleaks.toml you can customize rules and write your own secret detection rules.
+  - __Pre-commit Hook for Secret Scanning & Integrating GitLeaks in CI Pipeline__
     - Gitleaks scans through commits.
       - Parses the output of a `git log -p` command
       - Even though the sensitive data has been removed, the history of the repo remain intact
@@ -288,4 +289,50 @@
     - Client-side vs. Server-side hooks:
       - Server-side hooks: These scripts run before and after pushes to the server, so you can enforce this on the server-side
         - Different server-side hooks: pre-receive, upate, post-receive
-      - 
+  - __False Positives & Fixing Security Vulnerabilities__
+    - We need to tweak our security tools to mitigate false positives:
+      - Configure the tools properly
+      - Keep them updated with the latest rules
+      - Regularly review and refine results based on real-world context
+    - Handling False positives:
+      - We don't fail the build
+        - You'll almost always face some amount of false positives
+        - But if there are so many that it distracts the team, you need to take steps to reduce them
+        - We will integrate it into the pipeline to optimize it step by step, so you don't interrupt the developer workflow until you mature the tool
+
+        ```.gitlab-ci.yml
+          gitleaks:
+          stage: test
+          image:
+              name: zricethezav/gitleaks
+              entrypoint: [""] # will not execute gitleaks immediately, waits until script is called
+          script:
+              - gitleaks detect --verbose --source .
+          allow_failure: true
+        ``` 
+
+      - Adjust the tool configuration
+        - e.g Custom configuration that is appllication specific
+
+      ```gitleaks.toml
+        [extend]
+        useDefault = true
+
+        [allowlist]
+        paths = ['test', '.*\/test\/.*']
+      ```
+  - This will ignore the files names above to avoid false positives
+  
+  - Ps. gitleaks failed to detect the false negatives with the hardcoded docker password. That needs to be communicated to developers because sometimes the scanning tools do not capture all secrets
+  - Record this as variables in gitlab and change the gitlab-ci.yml to reflect the change:
+
+    ```.gitlab-ci.yml
+    variables:
+      DOCKER_PASS: $DOCKER_PASS
+      DOCKER_USER: $DOCKER_USER
+    ```
+
+  - Set strict permissions on git repos
+    - Granular permission system
+    - Restrict access to project settings
+    - 
