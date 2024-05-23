@@ -321,18 +321,23 @@
         [allowlist]
         paths = ['test', '.*\/test\/.*']
       ```
-  - This will ignore the files names above to avoid false positives
+    - This will ignore the files names above to avoid false positives
+    
+    - Ps. gitleaks failed to detect the false negatives with the hardcoded docker password. That needs to be communicated to developers because sometimes the scanning tools do not capture all secrets
+    - Record this as variables in gitlab and change the gitlab-ci.yml to reflect the change:
+
+      ```.gitlab-ci.yml
+      variables:
+        DOCKER_PASS: $DOCKER_PASS
+        DOCKER_USER: $DOCKER_USER
+      ```
+
+    - Set strict permissions on git repos
+      - Granular permission system
+      - Restrict access to project settings
   
-  - Ps. gitleaks failed to detect the false negatives with the hardcoded docker password. That needs to be communicated to developers because sometimes the scanning tools do not capture all secrets
-  - Record this as variables in gitlab and change the gitlab-ci.yml to reflect the change:
-
-    ```.gitlab-ci.yml
-    variables:
-      DOCKER_PASS: $DOCKER_PASS
-      DOCKER_USER: $DOCKER_USER
-    ```
-
-  - Set strict permissions on git repos
-    - Granular permission system
-    - Restrict access to project settings
-    - 
+  - __Integrate SAST Scans in Release Pipeline__
+    - There are different SAST tools based on programming languages
+    - Each language has its own syntax, semantics and potential security pitfalls, which is why specialized SAST tools are created
+    - Language-specifi vulnerabilities
+    - njsscan: static security code scanner for Node.js apps
