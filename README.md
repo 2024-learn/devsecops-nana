@@ -337,7 +337,110 @@
       - Restrict access to project settings
   
   - __Integrate SAST Scans in Release Pipeline__
+    - SAST(Static Application Security Testing) is code analysis that is performed before the app is executed
+    - It identifies the security vulnerabilities in the app's source code, config files, etc.
     - There are different SAST tools based on programming languages
-    - Each language has its own syntax, semantics and potential security pitfalls, which is why specialized SAST tools are created
-    - Language-specifi vulnerabilities
-    - njsscan: static security code scanner for Node.js apps
+      - Each language has its own syntax, semantics and potential security pitfalls, which is why specialized SAST tools are created
+      - Language-specific vulnerabilities
+      - eg. njsscan, deepScan, Flow: static security code scanner for Js apps,
+        - SpotBugs, CheckStyle, Error-Prone for Java apps,
+        - Bandit, Pysa for Python apps
+    - There are SAST tools that can scan multiple languages eg. Semgrep, Snyk Code, SonarQube, CHeckmarx, ... etc
+    - <https://hub.docker.com/r/opensecurity/njsscan>
+  - It is important to use different tools because they will catch different vulnerabilites, based on the organization's needs, available resources, ... etc.
+  - There are different levels of severity
+    - Refers to the degree of imapct or potential harm that a security vulnerability could have on a system, app or data
+    - Often categorized into:
+      - Critical or High Severity
+      - Medium Severity
+      - Low or Warning
+      - Informational
+    - This helps us understand the level of risk posed by particular vulnerability and determine how urgently it needs to be addressed, and what can be ignored or marked as optional
+    - So the configuration to fail the build can be configured based on the severity level
+  - Semgrep:
+    - Ref:
+      - <https://hub.docker.com/search?q=semgrep>
+      - <https://semgrep.dev/docs/semgrep-ci/sample-ci-configs>
+      - <https://semgrep.dev/docs/ignoring-files-folders-code#understand-semgrep-defaults>
+    - Free open-source SAST tool
+    - Supports multiple langiages like C#, Go, Java, JS, Ruby, Python, PHP, Scala
+    - You can specify the language it will be scanning
+
+## Vulnerability Management and Remediation
+
+- __Generate Security Scanning Reports__
+  - Vulnerability management tools centrally manage vulnerability findings across different tools
+    - Enriches and refines vulnerability data
+    - Triage vulnerabilities and push findings to other systems
+  - e.g. DefectDojo: OpenSource vulnerability management tool
+    - How it Works:
+      - Findings in files from the logs
+      - Run DefetDojo
+      - Feed report files to DefectDojo
+    - Tools produce report files in a format that the visualization tool can consume
+    - Each tool produces its wn type of security report so DefectDojo is able to interpret these different report files, we need to specify the tool the report is coming from.
+    - Generate scan report files:
+      - Produce file reports for each scan tool
+      - Import to DefectDojo
+      
+      ```.gitlab-ci.yml
+      ...
+      script:
+        - gitleaks detect --verbose --source . -f json -r gitleaks.json
+      allow_failure: true
+      ...
+
+      script:
+        - njsscan --exit-warning . --sarif -o njsscan.sarif
+      ...
+
+
+      ```
+      - This will generate a json file called gitleaks.json
+      - Then configure the artifacts attribute to save that file outside of the pipeline for use by DefectDojo:
+
+      ```.gitlab-ci.yml
+      ...
+      script:
+        - gitleaks detect --verbose --source . -f json -r gitleaks.json
+      allow_failure: true
+      artifacts:
+        when: always  # Configure when it should be saved, if always..regardless of failure
+        paths:
+          - gitleaks.json
+      ...
+      ```
+      - The pipeline will then create artifacts that can be dowloaded and imported to DefectDojo
+- __Introduction to Defectdojo, Managing Security Findings, CWEs__
+  - Ref:
+    - DefectDojo
+      - Installation: <https://documentation.defectdojo.com/getting_started/installation/>
+      - Image: <https://hub.docker.com/r/defectdojo/defectdojo-django>
+      - Demo: <https://demo.defectdojo.org/>
+    - CWE
+      - CWE List: <https://cwe.mitre.org/data/definitions/699.html>
+      - OWASP Top 10 Mapping: <https://cwe.mitre.org/data/definitions/1344.html>
+  - DefectDojo serves as an aggregator and provides a unified and streamlined view for security tools
+  - Smart features to enhance and tune the results from your security tools (Merge findings, remember false positives, distill duplicates ...)
+  - You can also push the findings to other tools. Bi-directional integration with Jira, Notifications, Google Sheets synchronization, etc.
+  - Enables traceability among multiple projects/ test cycles and allows for fine-grained reporting
+  - Create product type > add product > findings/import scan results.
+    - Scan types: semgrep.json, SARIF, gitleaks.json ...
+  - Note on the demo UI app: any data will be public and data is reset ever hour, it does not persist data
+  - There are 2 types of engagment:
+    - Interactive Engagement: Findings are uploaded by the engineer
+    - CI/CD Engagement: For automated intergration with a CI/CD pipeline
+  - Analyze Findings
+    - Findings > view active findings
+  - CWE: Common Weakness Enumeration: More detailed list of security threats
+    - Description of the issue, what causes it and how it can be fixed
+    - Maps to OWASP 10 categories
+    - It is a comnnunity developed list of common software and hardness weakness types. Separate from OWASP
+    - Main idea: Stop vulnerabilities at the source by educating engineers on how to eliminate the most commin mistakes before products are delivered
+    - Discuss weaknesses in a common language
+    - Leverage a common baseline standard for weakness identification and mitigation
+    - Express vulnerability in numeric information
+  - Use scan results to educate
+    - Main purpose of security scans in the development process is to train developers continuously in various security topics because everyone is responsible for the security of the applications
+- __Automate Uploading Security Scan Results to DefectDojo__
+    - 
