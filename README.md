@@ -1,7 +1,5 @@
 # DevSecOps Bootcamp
-
-## Security Essentials
-
+## 1. Security Essentials
 - Government regulations:
   - GDPR: General Data Protection Regulation - EU's data protection law
 - Compliance:
@@ -9,24 +7,22 @@
 - __Types of Attacks:__
   - _Phishing attack/Social Hacking:_
     - Tricking a human, instead of a system
-    - e.g. Attacker sends a legitimate looking email that executes a harmful script when clicked on by the user
-      - phone call, misrepresenting a person with a fake ID card, thumbdrive from a co-worker or found in the parking lot, getting forwarded to an identical but fake website from the original authentic website, ...etc
+    - e.g. Attacker sends a legitimate looking email that executes a harmful script when clicked on by the user, phone call, misrepresenting a person with a fake ID card, thumbdrive from a co-worker or found in the parking lot, getting forwarded to an identical but fake website from the original authentic website, ...etc
   - _Cross Site Scripting (XSS):_
     - Takes advantage of application vulnerabilities
     - Attacker injects the website with malicious script which is then loaded and executed in a user's browser
     - Common impact: stealing user identity
-  - _Client Side Request Forgery (CSRF)/Session Hijacking:_
-    - <https://owasp.org/www-community/attacks/csrf>
+  - [_Client Side Request Forgery (CSRF)/Session Hijacking:_](https://owasp.org/www-community/attacks/csrf)
     - Attacker forges a request by pretending to be another user
     - "Client-side" indicates that the attack takes place on the user's side, within their browser
     - CSRF is an attack that tricks the victim into submitting a malicious request. It inherits the identity and privileges of the victim to perform an undesired function on the victim’s behalf.
     - If the application does not have a proper logic for revoking stolen Session IDs and tokens, an attacker can hold on to those keys and gain access for as long as they like
     - An attacker can use XSS to inject JS code that steals session onformation and start making those forged requests as the authorized user within that application using that logged in user's session
     - This can happen if the application has weak authentication checks, does not reject eternal code, e.g. JS code, does not properly validate user on email change
-  - _Server- Side Request Forgery (SSRF):_
+  - [_Server- Side Request Forgery (SSRF):_](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
     - Attackers forges the request pretending to be the server
-    - <https://owasp.org/www-community/attacks/Server_Side_Request_Forgery>
-    - In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can supply or modify a URL which the code running on the server will read or submit data to, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like http enabled databases or perform post requests towards internal services which are not intended to be exposed.
+    - In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources.
+      - The attacker can supply or modify a URL which the code running on the server will read or submit data to, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like http enabled databases or perform post requests towards internal services which are not intended to be exposed.
     - Requires more in-depth knowledge of the application's architecture and behavior, but more dangerous because of administrative access and access to all user data
   - _SQL Injection:_
     - Attacker manipulates or injects malicious SQL code into a database query
@@ -43,7 +39,9 @@
     - Public databases for known security vulnerabilities:
       - CVE: Common Vulnerabilities and Exposures
         - This is a system that provides a reference for publicly known security vulnerabilities
-    - PII: Personal Identifiable Information: Information that, when used alone or with other relevant data can identify an individual; like: biometric identifiers, name, full face photos, geographical info, phone, acocunt numbers, address, vehical or insurance, birthdate, medical and health plan info, email, SSN etc. This information is unique to a user
+    - PII: Personal Identifiable Information: Information that, when used alone or with other relevant data can identify an individual; like: 
+      - biometric identifiers, name, full face photos, geographical info, phone, acocunt numbers, address, vehical or insurance, birthdate, medical and health plan info, email, SSN etc. 
+      - This information is unique to a user.
   - _Weak Password:_
     - Attackers can use brute-force attacks through use of trial and error to try and break into a network or website. They typically use hacking tools to automate these login attempts
     - Enforce strong password policy: e.g. specific number of characters, special characters, forbid phrase passwords, do not reuse the same password for multiple applications, use password managers like lastPass or 1pass.
@@ -53,8 +51,7 @@
     - Distributed Denial of Service (DDoS): Often multiple compromised systems (botnet) are coordinated to launch the attack simultaneously
     - Attack consumes all the available bandwidth, consumes too many connections and exhausts the server's resources, such as CPU, memory..., leaving the server unable to handle legitimate requests
     - How to defend against: Firewalls, Intrusion Detections Systems (IDS), Traffic filtering, etc.
-- __Open Web Application Security Project (OWASP) Top 10 Project__
-  - <https://owasp.org/www-project-top-ten/>
+- [__Open Web Application Security Project (OWASP) Top 10 Project__](https://owasp.org/www-project-top-ten/>)
   - It is a global non-profit organization that is focussed on improving the security of web applications
   - Lists the most critical web application security risks (list of common threats).
   - Regularly updated (every 3-4 yrs) to reflect emerging threats
@@ -65,7 +62,7 @@
     - Impact
     - Exploitability
     - Detectability
-  - The more comprehensive OWASP is: OWASP Application Security Verification Standard(ASVS): <https://owasp.org/www-project-application-security-verification-standard/>
+  - The more comprehensive OWASP is: [OWASP Application Security Verification Standard(ASVS):](https://owasp.org/www-project-application-security-verification-standard/)
   - _8 of the categories are from data:_
     - Data factors: CWEs Mapped, Incidence Rate, Weighted Exploit, Weighted Impact, Total Occurrences, ...
   - _2 categories are from Top 10 community survey:_
@@ -126,7 +123,7 @@
     - Deals with failure to properly identify and authenticate a user
     - Previously known as "Broken Authentication"
     - Includes vulnerabilities that are specifically related to identification
-      - Identification: The act of identifyong a particular user (often through a username) or other credentials and the authentication process of validating that a suer is whi they calim to be (proof of user's identity)
+      - Identification: The act of identifyong a particular user (often through a username) or other credentials and the authentication process of validating that a user is whom they claim to be (proof of user's identity).
       - Authentication is different from authorization.
         - Authorization: process of validatiing that the user (who has previously authenticated) has the permission to perform a particular action
     - Causes:
@@ -177,8 +174,7 @@
       - Users, process and systems are only granted the minimum privileges necessary to perform the tasks. This limits the damage done through permissions
   - DevSecOps works to automate checking (security testing, vulnerability scanning, code analysis, compliance checks ...) and validating that all layers of security are implemented and in place, giving you a visibility of how secure your systems are/what the security posture looks like
 
-## Introduction to DevSecOps
-
+## 2. Introduction to DevSecOps
 - __Evolution of DevSecOps__
   - Traditional way: Security as an afterthought.
     - Security was not considered until after the release of an application where the patching was done afterwards
@@ -240,8 +236,7 @@
   - Provide guidance on secure coding standards, perform code reviews, etc
   - Establish mechanisms for continuous security monitoring, threat detection and vulnerability scanning
 
-## Application Vulnerability Scanning
-
+## 3. Application Vulnerability Scanning
   - yarn: alternative for npm
   - `node_modules`: folder where yarn saves the downloaded modules from the web
   - `yarn.lock`: auto-generated file by yarn containing information of which versions of each dependencies were installed
@@ -254,15 +249,13 @@
       - e.g. GitLeaks
       - Fast light-weight and open-source secret scanner for git repos
       - Detects over 160 secret types, new types added all the time
-    - Install GitLeaks: <https://akashchandwani.medium.com/what-is-gitleaks-and-how-to-use-it-a05f2fb5b034>
-      - `brew install gitleaks` or 
-      - install it via a docker image: <https://hub.docker.com/r/zricethezav/gitleaks>
+    - [Install GitLeaks:](https://akashchandwani.medium.com/what-is-gitleaks-and-how-to-use-it-a05f2fb5b034)
+      - `brew install gitleaks` or install it via a [docker image: ](https://hub.docker.com/r/zricethezav/gitleaks)
         - `docker pull zricethezav/gitleaks:latest`
         - `export path_to_host_folder_to_scan=/Users/likimanip/code/devops/devsecops-nana/juice-shop`
         - `docker run -v ${path_to_host_folder_to_scan}:/path zricethezav/gitleaks:latest detect --source="/path" -v` # or `--verbose`
         - `gitleaks detect --source="./juice-shop" -v` or `gitleaks detect --verbose --source .`: Will scan repos, directories and files
-      - <https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml>
-      - With gitleaks.toml you can customize rules and write your own secret detection rules.
+      - With [gitleaks.toml](https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml) you can customize rules and write your own secret detection rules.
   - __Pre-commit Hook for Secret Scanning & Integrating GitLeaks in CI Pipeline__
     - Gitleaks scans through commits.
       - Parses the output of a `git log -p` command
@@ -278,7 +271,6 @@
           - "pre-commit" hook is fired when you are about to commit your changes
         - The hooks are all stored in the hooks subdirectory of the git golder: `.git/hooks`. You can view this by: `ls .git`
         - `vi .git/hooks/pre-commit`
-
         ```#!/bin/bash
         docker pull zricethezav/gitleaks:latest
         export path_to_host_folder_to_scan=/Users/likimanip/code/devops/devsecops-juice-shop
@@ -299,7 +291,6 @@
         - You'll almost always face some amount of false positives
         - But if there are so many that it distracts the team, you need to take steps to reduce them
         - We will integrate it into the pipeline to optimize it step by step, so you don't interrupt the developer workflow until you mature the tool
-
         ```.gitlab-ci.yml
           gitleaks:
           stage: test
@@ -310,10 +301,8 @@
               - gitleaks detect --verbose --source .
           allow_failure: true
         ``` 
-
       - Adjust the tool configuration
         - e.g Custom configuration that is appllication specific
-
       ```gitleaks.toml
         [extend]
         useDefault = true
@@ -325,13 +314,11 @@
     
     - Ps. gitleaks failed to detect the false negatives with the hardcoded docker password. That needs to be communicated to developers because sometimes the scanning tools do not capture all secrets
     - Record this as variables in gitlab and change the gitlab-ci.yml to reflect the change:
-
       ```.gitlab-ci.yml
       variables:
         DOCKER_PASS: $DOCKER_PASS
         DOCKER_USER: $DOCKER_USER
       ```
-
     - Set strict permissions on git repos
       - Granular permission system
       - Restrict access to project settings
@@ -346,7 +333,7 @@
         - SpotBugs, CheckStyle, Error-Prone for Java apps,
         - Bandit, Pysa for Python apps
     - There are SAST tools that can scan multiple languages eg. Semgrep, Snyk Code, SonarQube, CHeckmarx, ... etc
-    - <https://hub.docker.com/r/opensecurity/njsscan>
+    - [njsscan](https://hub.docker.com/r/opensecurity/njsscan)
   - It is important to use different tools because they will catch different vulnerabilites, based on the organization's needs, available resources, ... etc.
   - There are different levels of severity
     - Refers to the degree of imapct or potential harm that a security vulnerability could have on a system, app or data
@@ -366,8 +353,7 @@
     - Supports multiple langiages like C#, Go, Java, JS, Ruby, Python, PHP, Scala
     - You can specify the language it will be scanning
 
-## Vulnerability Management and Remediation
-
+## 4. Vulnerability Management and Remediation
 - __Generate Security Scanning Reports__
   - Vulnerability management tools centrally manage vulnerability findings across different tools
     - Enriches and refines vulnerability data
@@ -383,43 +369,41 @@
       - Produce file reports for each scan tool
       - Import to DefectDojo
       
-      ```.gitlab-ci.yml
-      ...
-      script:
-        - gitleaks detect --verbose --source . -f json -r gitleaks.json
-      allow_failure: true
-      ...
+        ```.gitlab-ci.yml
+        ...
+        script:
+          - gitleaks detect --verbose --source . -f json -r gitleaks.json
+        allow_failure: true
+        ...
 
-      script:
-        - njsscan --exit-warning . --sarif -o njsscan.sarif
-      ...
-
-
-      ```
+        script:
+          - njsscan --exit-warning . --sarif -o njsscan.sarif
+        ...
+        ```
       - This will generate a json file called gitleaks.json
       - Then configure the artifacts attribute to save that file outside of the pipeline for use by DefectDojo:
 
-      ```.gitlab-ci.yml
-      ...
-      script:
-        - gitleaks detect --verbose --source . -f json -r gitleaks.json
-      allow_failure: true
-      artifacts:
-        when: always  # Configure when it should be saved, if always..regardless of failure
-        paths:
-          - gitleaks.json
-      ...
-      ```
+        ```.gitlab-ci.yml
+        ...
+        script:
+          - gitleaks detect --verbose --source . -f json -r gitleaks.json
+        allow_failure: true
+        artifacts:
+          when: always  # Configure when it should be saved, if always..regardless of failure
+          paths:
+            - gitleaks.json
+        ...
+        ```
       - The pipeline will then create artifacts that can be dowloaded and imported to DefectDojo
 - __Introduction to Defectdojo, Managing Security Findings, CWEs__
   - Ref:
     - DefectDojo
-      - Installation: <https://documentation.defectdojo.com/getting_started/installation/>
-      - Image: <https://hub.docker.com/r/defectdojo/defectdojo-django>
-      - Demo: <https://demo.defectdojo.org/>
+      - [Installation:](https://documentation.defectdojo.com/getting_started/installation/)
+      - [Image:](https://hub.docker.com/r/defectdojo/defectdojo-django)
+      - [Demo:](https://demo.defectdojo.org/)
     - CWE
-      - CWE List: <https://cwe.mitre.org/data/definitions/699.html>
-      - OWASP Top 10 Mapping: <https://cwe.mitre.org/data/definitions/1344.html>
+      - [CWE List:](https://cwe.mitre.org/data/definitions/699.html)
+      - [OWASP Top 10 Mapping:](https://cwe.mitre.org/data/definitions/1344.html)
   - DefectDojo serves as an aggregator and provides a unified and streamlined view for security tools
   - Smart features to enhance and tune the results from your security tools (Merge findings, remember false positives, distill duplicates ...)
   - You can also push the findings to other tools. Bi-directional integration with Jira, Notifications, Google Sheets synchronization, etc.
